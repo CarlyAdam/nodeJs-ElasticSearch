@@ -16,7 +16,7 @@ NodeJs Api +Elastic Search
 ```
 1- Run: npm start
 2- Install npm install
-3- Test:  npm test
+3- Dev:  npm run dev
 
 ```
 ####Api Rest Services

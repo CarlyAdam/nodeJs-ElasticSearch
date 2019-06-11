@@ -1,4 +1,5 @@
 const { Client } = require('@elastic/elasticsearch');
+const db = require('../../config/db/');
 const Student = require('../models/student');
 
 const client = new Client({ node: process.env.ES_URL });
@@ -18,7 +19,6 @@ exports.getStudents = async (req, res) => {
 // search implementation with elastic search
 exports.search = async (req, res) => {
   const { query } = req.query;
-  console.log(query);
   try {
     const { body } = await client.msearch({
       body: [

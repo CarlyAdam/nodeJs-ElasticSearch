@@ -43,3 +43,31 @@ exports.search = async (req, res) => {
    
   
 };
+
+// create new student in mongodb and add to elasticSearch index
+exports.addStudent = async (req, res) => {
+  try {
+
+      const student = new Student(req.body);
+      student.save();
+
+      // create elasticsearch index with new data
+      client.bulk({
+        body: [
+          { index: { _index: 'student', _id: req.body._id } },
+          {
+            name: req.body.name,
+            lastName: req.body.lastName,
+          },
+        ],
+      }, (err, resp) => {
+          if(err){
+            return  res.status(500).send('ElasticSearch Problem!');
+          }
+      });
+      return  res.status(200).send('Student created successfully');
+    
+  } catch (err) {
+    return  res.status(500).send('Something broke!');
+  }
+}

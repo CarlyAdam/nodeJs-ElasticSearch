@@ -18,3 +18,28 @@ exports.getStudents = async (req, res) => {
    
   }
 };
+
+// search implementation with elastic search
+exports.search = async (req, res) => {
+  const {query}  = req.query;
+  console.log(query)
+  try {
+    const { body } = await client.msearch({
+      body: [
+        { index: 'student' },
+        { query: { match: { name: query } } },
+
+        { index: 'student' },
+        { query: { match: { lastName: query } } },
+      ],
+
+    });
+     return  res.json({
+        body: body.responses,
+  });
+  } catch (err) {
+   return  res.status(500).send('Something broke!');
+  }
+   
+  
+};

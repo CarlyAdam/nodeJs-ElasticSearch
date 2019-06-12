@@ -1,9 +1,5 @@
-const { Client } = require('@elastic/elasticsearch');
 const Student = require('../models/student');
-const config = require('./src/config');
-const elastic = require('./././helpers/elastic');
-
-const client = new Client({ node: config.esUrl });
+const elastic = require('../../helpers/elastic');
 
 // Get all students
 exports.getStudents = async (req, res) => {
@@ -24,7 +20,7 @@ exports.search = async (req, res) => {
   try {
     const body = await elastic.search(query);
     return res.json({
-      body
+      body : body,
     });
   } catch (err) {
     return res.status(500).send('Something broke!');
@@ -35,13 +31,12 @@ exports.search = async (req, res) => {
 exports.addStudent = async (req, res) => {
   try {
     const student = new Student(req.body);
-    const save = await student.save();
+    await student.save();
 
     // create elasticsearch index with new data
-   const index = await elastic.add(req.body);
+    await elastic.add(req.body);
 
     return res.status(200).send('Student created successfully');
-    
   } catch (err) {
     return res.status(500).send('Something broke!');
   }

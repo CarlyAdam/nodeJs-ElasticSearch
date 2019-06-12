@@ -1,4 +1,8 @@
+const { Client } = require('@elastic/elasticsearch');
+const config = require('../../config');
+
 const client = new Client({ node: config.esUrl });
+
 
 exports.search = async (query) => {
   try {
@@ -36,8 +40,4 @@ exports.add = async (body) => {
   } catch (err) {
     return err;
   }
-};
-
-module.exports = {
-  search,
 };

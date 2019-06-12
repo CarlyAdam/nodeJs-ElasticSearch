@@ -10,5 +10,5 @@ module.exports = {
   appName: process.env.APP_NAME,
   appPort: process.env.APP_PORT || 3000,
   esUrl: process.env.ES_URL,
-  
+
 };

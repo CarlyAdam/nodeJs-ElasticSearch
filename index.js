@@ -1,7 +1,7 @@
 require('dotenv').config();
-const express = require('express');
+const server = require('express');
 
-const app = express();
+const app = server();
 const cors = require('cors');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
@@ -27,7 +27,8 @@ if (config.appEnv !== 'test') {
 app.use('/api/students', require('./src/api/routes/'));
 
 // start server
-const port = config.appPort;
-const server = app.listen(port, () => {
-  debug(`Server listening on port ${port}`);
+app.listen(config.appPort, async () => {
+  debug('entrypoint', `Server running on port: ${config.appPort}`);
 });
+
+module.exports = app;

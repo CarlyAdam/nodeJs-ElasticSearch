@@ -5,16 +5,22 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./index.js",
-    "dev": "./node_modules/.bin/nodemon ./index.js"
+    "dev": "./node_modules/.bin/nodemon ./index.js",
+    "test": "./node_modules/.bin/mocha"
   },
   "keywords": [],
   "author": "Carlos Adan",
   "license": "ISC",
   "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.17.3",
-    "nodemon": "^1.19.1"
+    "mocha": "^6.1.4",
+    "nodemon": "^1.19.1",
+    "should": "^13.2.3",
+    "supertest": "^4.0.2"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^7.1.0",

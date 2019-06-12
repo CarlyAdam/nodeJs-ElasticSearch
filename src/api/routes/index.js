@@ -10,6 +10,6 @@ router.get('/', studentController.getStudents);
 router.get('/search', studentController.search);
 
 // route to create
-router.post('/create', studentController.addStudent);
+router.post('/', studentController.addStudent);
 
 module.exports = router;

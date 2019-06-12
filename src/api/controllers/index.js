@@ -1,8 +1,9 @@
 const { Client } = require('@elastic/elasticsearch');
-const db = require('../../config/db/');
 const Student = require('../models/student');
+const config = require('./src/config');
+const elastic = require('./././helpers/elastic');
 
-const client = new Client({ node: process.env.ES_URL });
+const client = new Client({ node: config.esUrl });
 
 // Get all students
 exports.getStudents = async (req, res) => {
@@ -19,19 +20,11 @@ exports.getStudents = async (req, res) => {
 // search implementation with elastic search
 exports.search = async (req, res) => {
   const { query } = req.query;
+
   try {
-    const { body } = await client.msearch({
-      body: [
-        { index: 'student' },
-        { query: { match: { name: query } } },
-
-        { index: 'student' },
-        { query: { match: { lastName: query } } },
-      ],
-
-    });
+    const body = await elastic.search(query);
     return res.json({
-      body: body.responses,
+      body
     });
   } catch (err) {
     return res.status(500).send('Something broke!');
@@ -42,23 +35,13 @@ exports.search = async (req, res) => {
 exports.addStudent = async (req, res) => {
   try {
     const student = new Student(req.body);
-    student.save();
+    const save = await student.save();
 
     // create elasticsearch index with new data
-    client.bulk({
-      body: [
-        { index: { _index: 'student', _id: req.body._id } },
-        {
-          name: req.body.name,
-          lastName: req.body.lastName,
-        },
-      ],
-    }, (err) => {
-      if (err) {
-        return res.status(500).send('ElasticSearch Problem!');
-      }
-    });
+   const index = await elastic.add(req.body);
+
     return res.status(200).send('Student created successfully');
+    
   } catch (err) {
     return res.status(500).send('Something broke!');
   }
